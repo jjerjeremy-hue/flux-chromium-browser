@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Flux Browser",
+    "slug": "flux-browser-mobile",
+    "scheme": "flux",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/flux-icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.fluxbrowser.mobile",
+      "supportsTablet": true,
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoadsInWebContent": true
+        }
+      }
+    },
+    "android": {
+      "package": "com.fluxbrowser.mobile",
+      "versionCode": 1,
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/flux-foreground.png",
+        "backgroundColor": "#6366F1"
+      }
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

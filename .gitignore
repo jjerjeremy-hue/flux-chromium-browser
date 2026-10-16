@@ -1,0 +1,14 @@
+node_modules/
+dist/
+release-assets/
+*.log
+mobile/AGENTS.md
+mobile/App.tsx
+mobile/index.ts
+mobile/LICENSE
+mobile/assets/android-icon-background.png
+mobile/assets/android-icon-foreground.png
+mobile/assets/android-icon-monochrome.png
+mobile/assets/favicon.png
+mobile/assets/icon.png
+mobile/assets/splash-icon.png

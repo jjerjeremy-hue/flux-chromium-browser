@@ -1,0 +1,53 @@
+{
+  "name": "flux-browser",
+  "productName": "Flux Browser",
+  "version": "1.2.0",
+  "description": "Flux Chromium browser for Windows, macOS, and Linux",
+  "main": "main.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis zip --x64",
+    "dist:mac": "electron-builder --mac dmg zip",
+    "dist:linux": "electron-builder --linux AppImage deb --x64"
+  },
+  "devDependencies": {
+    "electron": "44.7.2",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.fluxbrowser.desktop",
+    "productName": "Flux Browser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "tab-preload.js",
+      "index.html",
+      "renderer.js",
+      "home.html",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Flux uses the microphone only when you start voice search."
+      }
+    },
+    "linux": {
+      "category": "Network;WebBrowser;",
+      "synopsis": "Chromium-based web browser",
+      "target": ["AppImage", "deb"]
+    },
+    "win": {
+      "target": ["nsis", "zip"],
+      "artifactName": "Flux-Browser-${version}-${arch}.${ext}"
+    }
+  }
+}
