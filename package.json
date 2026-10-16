@@ -1,7 +1,11 @@
 {
   "name": "flux-browser",
   "productName": "Flux Browser",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "author": {
+    "name": "Flux Browser",
+    "email": "jjerjeremy@gmail.com"
+  },
   "description": "Flux Chromium browser for Windows, macOS, and Linux",
   "main": "main.js",
   "license": "UNLICENSED",
