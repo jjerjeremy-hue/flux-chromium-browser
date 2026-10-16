@@ -1,0 +1,41 @@
+name: Build Flux Android preview APK
+
+on:
+  push:
+    tags:
+      - 'mobile-v1.*'
+
+permissions:
+  contents: write
+
+jobs:
+  android-preview:
+    name: Android preview APK
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Generate Android project
+        working-directory: mobile
+        run: npx expo prebuild --platform android --no-install
+      - name: Build installable preview APK
+        working-directory: mobile/android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Name APK for download
+        run: cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Flux-Browser-Android-Preview-1.0.0.apk
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" Flux-Browser-Android-Preview-1.0.0.apk --title "Flux Browser Android Preview 1.0.0" --notes-file mobile/release-notes-android-v1.0.0.md --prerelease
