@@ -1,4 +1,4 @@
-## Flux Browser Android Preview 1.0.0
+## Flux Browser Android Preview 1.0.1
 
 This is a free, installable Android preview APK distributed outside Google Play. It is signed with Android's debug certificate for preview use and is not a Play Store production build.
 

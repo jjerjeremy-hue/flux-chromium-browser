@@ -3,7 +3,7 @@
     "name": "Flux Browser",
     "slug": "flux-browser-mobile",
     "scheme": "flux",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "default",
     "icon": "./assets/flux-icon.png",
     "userInterfaceStyle": "dark",
@@ -11,7 +11,7 @@
     "ios": {
       "bundleIdentifier": "com.fluxbrowser.mobile",
       "supportsTablet": true,
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoadsInWebContent": true
@@ -20,7 +20,7 @@
     },
     "android": {
       "package": "com.fluxbrowser.mobile",
-      "versionCode": 1,
+      "versionCode": 2,
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/flux-foreground.png",
