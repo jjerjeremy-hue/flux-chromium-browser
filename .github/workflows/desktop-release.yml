@@ -24,7 +24,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: flux-windows-x64
-          path: dist/*
+          path: |
+            dist/*.exe
+            dist/*.zip
           if-no-files-found: error
 
   macos:
@@ -45,7 +47,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: flux-macos-${{ matrix.arch }}
-          path: dist/*
+          path: |
+            dist/*.dmg
+            dist/*.zip
           if-no-files-found: error
 
   linux:
@@ -62,7 +66,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: flux-linux-x64
-          path: dist/*
+          path: |
+            dist/*.AppImage
+            dist/*.deb
           if-no-files-found: error
 
   release:

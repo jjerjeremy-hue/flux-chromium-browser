@@ -5,8 +5,8 @@ Flux is a Chromium-based desktop browser with isolated profiles, Chrome import f
 ## Downloads
 
 - **Windows x64:** [Flux Browser 1.1.0 ZIP](https://github.com/jjerjeremy-hue/flux-chromium-browser/releases/download/v1.1.0/Flux-Windows-x64-v1.1.0.zip)
-- **macOS:** 1.2.1 builds are configured for Intel and Apple Silicon in GitHub Actions. They are not available until the release workflow completes. Builds will be unsigned unless signing credentials are configured.
-- **Linux x64:** 1.2.1 AppImage and Debian packages are configured in GitHub Actions; not available until the release workflow completes.
+- **macOS:** 1.2.2 builds are configured for Intel and Apple Silicon in GitHub Actions. They are not available until the release workflow completes. Builds will be unsigned unless signing credentials are configured.
+- **Linux x64:** 1.2.2 AppImage and Debian packages are configured in GitHub Actions; not available until the release workflow completes.
 - **iPhone/iPad and Android:** a separate Expo mobile browser is in development under [`mobile/`](mobile/). Store builds and publication are not complete.
 - **Apple Vision Pro:** availability is not confirmed; this project does not currently provide a native visionOS build.
 
