@@ -282,6 +282,12 @@ ipcMain.handle('flux:tab-group', (_e, id, name) => assignGroup(id, name));
 ipcMain.handle('flux:toggle-reader', (_e, id) => toggleReader(id));
 ipcMain.handle('flux:set-vertical-tabs', (_e, enabled) => { store.settings.verticalTabs = !!enabled; persist(); fitViews(); sendState(); return store.settings.verticalTabs; });
 ipcMain.handle('flux:set-high-contrast', async (_e, enabled) => { store.settings.highContrast=!!enabled; persist(); for(const t of tabs){if(!store.settings.highContrast&&t.contrastCssKey){try{await t.view.webContents.removeInsertedCSS(t.contrastCssKey);}catch{}t.contrastCssKey=null;}else if(store.settings.highContrast)await applyContrast(t);}sendState();return store.settings.highContrast; });
+ipcMain.handle('flux:download-action', async (_e, filePath, action) => {
+  if (typeof filePath !== 'string' || !path.isAbsolute(filePath) || !['open', 'show'].includes(action) || !fs.existsSync(filePath)) return { ok: false };
+  if (action === 'show') shell.showItemInFolder(filePath);
+  else { const error = await shell.openPath(filePath); if (error) return { ok: false, message: error }; }
+  return { ok: true };
+});
 ipcMain.handle('flux:media-list', async () => {
   const items=[];
   for(const t of tabs){try{const media=await t.view.webContents.executeJavaScript(`Array.from(document.querySelectorAll('video,audio')).map((m,index)=>({index,title:(m.getAttribute('aria-label')||m.title||m.currentSrc||m.src||'Media').slice(0,180),paused:m.paused,video:m.tagName==='VIDEO',private:${!!t.private}})).slice(0,20)`);for(const item of media)if(item.title||item.video)items.push({tabId:t.id,tabTitle:t.title,...item});}catch{}}
@@ -291,6 +297,18 @@ ipcMain.handle('flux:media-action', async (_e,id,index,action) => {const t=tabs.
 ipcMain.handle('flux:navigate', (_e, id, value) => { const t = tabs.find(x => x.id === id); if (t) { const url = normalise(value); if (url) t.view.webContents.loadURL(url); } });
 ipcMain.handle('flux:nav-action', (_e, id, action) => { const t = tabs.find(x => x.id === id); if (!t) return; const wc = t.view.webContents; if (action === 'back' && wc.canGoBack()) wc.goBack(); else if (action === 'forward' && wc.canGoForward()) wc.goForward(); else if (action === 'reload') wc.reload(); else if (action === 'home') wc.loadURL(normalise(store.settings.home)); });
 ipcMain.handle('flux:bookmark', (_e, id) => { const t = tabs.find(x => x.id === id); if (!t || t.private) return false; const i = store.bookmarks.findIndex(b => b.url === t.url); if (i >= 0) store.bookmarks.splice(i, 1); else store.bookmarks.unshift({ title: t.title || t.url, url: t.url }); persist(); sendState(); return i < 0; });
+ipcMain.handle('flux:save-pdf', async (_e, id) => {
+  const t = tabs.find(x => x.id === id);
+  if (!t || t.view.webContents.isDestroyed()) return { ok: false, message: 'There is no active page to save.' };
+  const safeTitle = String(t.title || 'Flux page').replace(/[<>:"/\\|?*\x00-\x1f]/g, '-').trim().slice(0, 100) || 'Flux page';
+  const target = await dialog.showSaveDialog(win, { title: 'Save page as PDF', defaultPath: path.join(app.getPath('downloads'), `${safeTitle}.pdf`), filters: [{ name: 'PDF document', extensions: ['pdf'] }] });
+  if (target.canceled || !target.filePath) return { canceled: true };
+  try {
+    const pdf = await t.view.webContents.printToPDF({ printBackground: true, preferCSSPageSize: true });
+    fs.writeFileSync(target.filePath, pdf);
+    return { ok: true, file: path.basename(target.filePath) };
+  } catch (error) { return { ok: false, message: error.message || 'PDF export failed.' }; }
+});
 ipcMain.handle('flux:get-pages', (_e, kind) => kind === 'history' ? store.history.slice(0, 300) : store.bookmarks);
 ipcMain.handle('flux:open-page', (_e, url) => { if (activeId != null) { const t = tabs.find(x => x.id === activeId); if (t) t.view.webContents.loadURL(normalise(url)); } });
 ipcMain.handle('flux:settings', () => store.settings);

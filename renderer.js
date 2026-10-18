@@ -116,7 +116,22 @@ async function showPanel(name) {
   }
   if (name === 'downloads') {
     if (!downloads.length) { body.innerHTML = '<div class="row-sub">Downloads you save will appear here.</div>'; return; }
-    for (const d of downloads) { const x = document.createElement('div'); x.className = 'drawer-item'; x.textContent = d.name; x.title = d.path; body.appendChild(x); }
+    for (const d of downloads) {
+      const x = document.createElement('div'); x.className = 'drawer-item';
+      const title = document.createElement('div'); title.textContent = d.name;
+      const status = document.createElement('small'); status.textContent = d.state === 'completed' ? 'Download complete' : `Download ${d.state}`;
+      x.append(title, status);
+      if (d.state === 'completed' && d.path) {
+        const actions = document.createElement('div'); actions.style.cssText = 'display:flex;gap:6px;margin-top:8px';
+        for (const [label, action] of [['Open', 'open'], ['Show in folder', 'show']]) {
+          const button = document.createElement('button'); button.className = 'btn btn-secondary'; button.textContent = label;
+          button.onclick = async e => { e.stopPropagation(); const result = await window.flux.downloadAction(d.path, action); if (!result.ok) toast(result.message || 'Could not access this download'); };
+          actions.appendChild(button);
+        }
+        x.appendChild(actions);
+      }
+      body.appendChild(x);
+    }
     return;
   }
   if (name === 'media') {
@@ -204,6 +219,7 @@ $('#reload').onclick = () => window.flux.navAction(state.activeId, 'reload');
 $('#home').onclick = () => window.flux.navAction(state.activeId, 'home');
 $('#full').onclick = () => window.flux.fullscreen();
 $('#bookmark').onclick = async () => toast((await window.flux.bookmark(state.activeId)) ? 'Bookmark added' : 'Bookmark removed');
+$('#save-pdf').onclick = async () => { const result = await window.flux.savePdf(state.activeId); if (result?.ok) toast('PDF saved: ' + result.file); else if (!result?.canceled) toast(result?.message || 'Could not save this page as PDF'); };
 $('#address').addEventListener('keydown', e => { if (e.key === 'Enter') { window.flux.navigate(state.activeId, e.target.value); e.target.blur(); } });
 $('#address').addEventListener('focus', e => e.target.select());
 $('#profile').onclick = () => showPanel('profile');
