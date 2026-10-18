@@ -196,7 +196,7 @@ function importChrome() {
 }
 
 function createWindow() {
-  win = new BrowserWindow({ width: 1440, height: 920, minWidth: 900, minHeight: 620, backgroundColor: '#111318', title: 'Flux', autoHideMenuBar: true, webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, sandbox: true, nodeIntegration: false } });
+  win = new BrowserWindow({ width: 1440, height: 920, minWidth: 900, minHeight: 620, backgroundColor: '#202020', title: 'Flux', autoHideMenuBar: true, webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, sandbox: true, nodeIntegration: false } });
   win.loadFile(path.join(__dirname, 'index.html'));
   win.webContents.on('before-input-event', browserShortcut);
   win.on('resize', fitViews);

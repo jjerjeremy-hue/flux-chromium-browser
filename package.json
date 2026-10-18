@@ -1,7 +1,7 @@
 {
   "name": "flux-browser",
   "productName": "Flux Browser",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "author": {
     "name": "Flux Browser",
     "email": "jjerjeremy@gmail.com"
@@ -33,7 +33,8 @@
       "renderer.js",
       "home.html",
       "package.json",
-      "flux-logo.svg"
+      "flux-logo.svg",
+      "win11.css"
     ],
     "mac": {
       "category": "public.app-category.productivity",
